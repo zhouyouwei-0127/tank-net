@@ -9,7 +9,8 @@ import java.util.List;
 public class TankFrame extends Frame {
     public static final TankFrame INSTANCE = new TankFrame();
 
-    public final int GAME_WIDTH = 1000, GAME_HEIGHT = 800;
+    public final int GAME_WIDTH = Integer.parseInt(PropertyMgr.get("gameWidth"));
+    public final int GAME_HEIGHT = Integer.parseInt(PropertyMgr.get("gameHeight"));
     private Player myTank;
     private List<Tank> tanks;
     private List<Bullet> bullets;
@@ -31,7 +32,8 @@ public class TankFrame extends Frame {
         this.explodes = new ArrayList<>();
 
         this.tanks = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        int tankCount = Integer.parseInt(PropertyMgr.get("initTankCount"));
+        for (int i = 0; i < tankCount; i++) {
             tanks.add(new Tank(100 * i, 200, Dir.D, Group.BAD));
         }
     }

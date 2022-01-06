@@ -1,5 +1,7 @@
 package com.zyw.tank;
 
+import com.zyw.tank.strategy.FireStrategy;
+import com.zyw.tank.strategy.FourDirFireStrategy;
 import lombok.Getter;
 
 import java.awt.*;
@@ -9,6 +11,7 @@ public class Player {
     @Getter
     private int x, y;
 
+    @Getter
     private Dir dir;
 
     private boolean bL, bU, bR, bD;
@@ -17,16 +20,21 @@ public class Player {
 
     private boolean moving;
 
+    @Getter
     private final Group group;
 
     @Getter
     private boolean live = true;
+
+    private FireStrategy strategy = null;
 
     public Player(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
+
+        initFireStrategy();
     }
 
     public void paint(Graphics g) {
@@ -107,10 +115,18 @@ public class Player {
         setMainDir();
     }
 
+    private void initFireStrategy() {
+        try {
+            Class<?> clazz = Class.forName("com.zyw.tank.strategy." + PropertyMgr.get("fireStrategy"));
+            strategy = (FireStrategy) clazz.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void fire() {
-        int bX = this.x + ResourceMgr.goodTankU.getWidth()/2 - ResourceMgr.bulletU.getWidth()/2;
-        int bY = this.y + ResourceMgr.goodTankU.getHeight()/2 - ResourceMgr.bulletU.getHeight()/2;
-        TankFrame.INSTANCE.addBullet(new Bullet(bX, bY, dir, group));
+
+        strategy.fire(this);
     }
 
     private void move() {
