@@ -2,7 +2,9 @@ package com.zyw.tank.strategy;
 
 import com.zyw.tank.Player;
 
-public interface FireStrategy {
+import java.io.Serializable;
+
+public interface FireStrategy extends Serializable {
 
     void fire(Player player);
 }

@@ -7,7 +7,10 @@ import lombok.Getter;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class Player {
+public class Player extends AbstractGameObject {
+
+    private static final long serialVersionUID = -1938217222300422186L;
+
     @Getter
     private int x, y;
 

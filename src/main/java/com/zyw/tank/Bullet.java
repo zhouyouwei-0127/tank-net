@@ -6,6 +6,8 @@ import java.awt.*;
 
 public class Bullet extends AbstractGameObject {
 
+    private static final long serialVersionUID = -4190659397383230979L;
+
     public static final int SPEED = 10;
 
     private final Dir dir;
@@ -18,11 +20,11 @@ public class Bullet extends AbstractGameObject {
     @Getter
     private boolean live = true;
 
-    private int w = ResourceMgr.bulletU.getWidth();
+    public static final int W = ResourceMgr.bulletU.getWidth();
 
-    private int h = ResourceMgr.bulletU.getHeight();
+    public static final int H = ResourceMgr.bulletU.getHeight();
 
-    private Rectangle rect;
+    private final Rectangle rect;
 
     public Bullet(int x, int y, Dir dir, Group group) {
         this.x = x;
@@ -30,7 +32,7 @@ public class Bullet extends AbstractGameObject {
         this.dir = dir;
         this.group = group;
 
-        rect = new Rectangle(x, y, w, h);
+        rect = new Rectangle(x, y, W, H);
     }
 
     public void paint(Graphics g) {

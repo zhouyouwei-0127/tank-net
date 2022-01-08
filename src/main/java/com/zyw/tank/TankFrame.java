@@ -1,10 +1,12 @@
 package com.zyw.tank;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.*;
 
 public class TankFrame extends Frame {
 
@@ -15,7 +17,8 @@ public class TankFrame extends Frame {
     public final int GAME_HEIGHT = Integer.parseInt(PropertyMgr.get("gameHeight"));
 
     @Getter
-    private final GameModel gm = new GameModel();
+    @Setter
+    private GameModel gm = new GameModel();
 
     private TankFrame() {
         this.setTitle("tank war");
@@ -48,10 +51,75 @@ public class TankFrame extends Frame {
         g.drawImage(offScreenImage, 0, 0, null);
     }
 
+    public void load() {
+        FileInputStream fis = null;
+        ObjectInputStream ois = null;
+        try {
+            File file = new File("D:/zyw/java/study/tank.dat");
+            fis = new FileInputStream(file);
+            ois = new ObjectInputStream(fis);
+            this.gm = (GameModel) ois.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ois != null) {
+                try {
+                    ois.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    public void save() {
+        FileOutputStream fos = null;
+        ObjectOutputStream oos = null;
+        try {
+            File file = new File("D:/zyw/java/study/tank.dat");
+            fos = new FileOutputStream(file);
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(this.gm);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (oos != null) {
+                try {
+                    oos.flush();
+                    oos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (fos != null) {
+                try {
+                    fos.flush();
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     private class TankKeyListener extends KeyAdapter {
 
         @Override
         public void keyPressed(KeyEvent e) {
+            int keyCode = e.getKeyCode();
+            if (keyCode == KeyEvent.VK_S) {
+                save();
+            } else if (keyCode == KeyEvent.VK_L) {
+                load();
+            }
             gm.getMyTank().keyPressed(e);
         }
 

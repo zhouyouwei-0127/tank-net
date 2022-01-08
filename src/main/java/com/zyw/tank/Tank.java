@@ -6,6 +6,9 @@ import java.awt.*;
 import java.util.Random;
 
 public class Tank extends AbstractGameObject {
+
+    private static final long serialVersionUID = 923444048306782297L;
+
     @Getter
     private int x, y;
 
@@ -63,8 +66,8 @@ public class Tank extends AbstractGameObject {
     }
 
     private void fire() {
-        int bX = this.x + this.width / 2 - ResourceMgr.bulletU.getWidth() / 2;
-        int bY = this.y + this.height / 2 - ResourceMgr.bulletU.getHeight() / 2;
+        int bX = this.x + this.width / 2 - Bullet.W / 2;
+        int bY = this.y + this.height / 2 - Bullet.H / 2;
         TankFrame.INSTANCE.getGm().add(new Bullet(bX, bY, dir, group));
     }
 

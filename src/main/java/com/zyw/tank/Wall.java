@@ -6,7 +6,10 @@ import java.awt.*;
 
 public class Wall extends AbstractGameObject {
 
+    private static final long serialVersionUID = 2807278703150570582L;
+
     private final int x, y, w, h;
+
     private final Rectangle rect;
 
     @Getter
