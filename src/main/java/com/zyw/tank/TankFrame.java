@@ -1,21 +1,21 @@
 package com.zyw.tank;
 
-import com.zyw.tank.chainofresponsibility.Collider;
-import com.zyw.tank.chainofresponsibility.ColliderChain;
+import lombok.Getter;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TankFrame extends Frame {
+
     public static final TankFrame INSTANCE = new TankFrame();
+
     public final int GAME_WIDTH = Integer.parseInt(PropertyMgr.get("gameWidth"));
+
     public final int GAME_HEIGHT = Integer.parseInt(PropertyMgr.get("gameHeight"));
-    private Player myTank;
-    private List<AbstractGameObject> objects;;
-    private final ColliderChain colliderChain = new ColliderChain();
+
+    @Getter
+    private final GameModel gm = new GameModel();
 
     private TankFrame() {
         this.setTitle("tank war");
@@ -23,52 +23,11 @@ public class TankFrame extends Frame {
         this.setSize(GAME_WIDTH, GAME_HEIGHT);
 
         this.addKeyListener(new TankKeyListener());
-
-        initGameObjects();
-    }
-
-    private void initGameObjects() {
-        this.myTank = new Player(100, 100, Dir.D, Group.GOOD);
-
-        this.objects = new ArrayList<>();
-        int tankCount = Integer.parseInt(PropertyMgr.get("initTankCount"));
-        for (int i = 0; i < tankCount; i++) {
-            objects.add(new Tank(100 * i, 200, Dir.D, Group.BAD));
-        }
-        this.add(new Wall(300,400,400,50));
-    }
-
-    public void add(AbstractGameObject go) {
-        objects.add(go);
     }
 
     @Override
     public void paint(Graphics g) {
-        Color c = g.getColor();
-        g.setColor(Color.WHITE);
-        g.drawString("objects: " + objects.size(), 10, 50);
-        g.setColor(c);
-
-        if (myTank.isLive()) {
-            myTank.paint(g);
-        }
-
-        for (int i = 0; i < objects.size(); i++) {
-            if (!objects.get(i).isLive()) {
-                objects.remove(i);
-                break;
-            }
-
-            AbstractGameObject go1 = objects.get(i);
-            for (int j = 0; j < objects.size(); j++) {
-                AbstractGameObject go2 = objects.get(j);
-                colliderChain.collide(go1, go2);
-            }
-
-            if (objects.get(i).isLive()) {
-                objects.get(i).paint(g);
-            }
-        }
+        gm.paint(g);
     }
 
     /**
@@ -93,12 +52,12 @@ public class TankFrame extends Frame {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            myTank.keyPressed(e);
+            gm.getMyTank().keyPressed(e);
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-            myTank.keyReleased(e);
+            gm.getMyTank().keyReleased(e);
         }
     }
 }
