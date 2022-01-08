@@ -4,7 +4,7 @@ import lombok.Getter;
 
 import java.awt.*;
 
-public class Explode {
+public class Explode extends AbstractGameObject {
     @Getter
     private final int x, y;
 

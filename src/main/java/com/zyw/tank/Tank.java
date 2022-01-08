@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.awt.*;
 import java.util.Random;
 
-public class Tank {
+public class Tank extends AbstractGameObject {
     @Getter
     private int x, y;
 
@@ -27,17 +27,18 @@ public class Tank {
 
     private final Random r = new Random();
 
+    private final Rectangle rect;
+
     public Tank(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-
         this.oldX = x;
         this.oldY = y;
-
         this.width = ResourceMgr.goodTankU.getWidth();
         this.height = ResourceMgr.goodTankU.getHeight();
+        rect = new Rectangle(x, y, width, height);
     }
 
     public void paint(Graphics g) {
@@ -57,12 +58,14 @@ public class Tank {
         }
 
         move();
+        rect.x = x;
+        rect.y = y;
     }
 
     private void fire() {
-        int bX = this.x + ResourceMgr.goodTankU.getWidth()/2 - ResourceMgr.bulletU.getWidth()/2;
-        int bY = this.y + ResourceMgr.goodTankU.getHeight()/2 - ResourceMgr.bulletU.getHeight()/2;
-        TankFrame.INSTANCE.addBullet(new Bullet(bX, bY, dir, group));
+        int bX = this.x + this.width / 2 - ResourceMgr.bulletU.getWidth() / 2;
+        int bY = this.y + this.height / 2 - ResourceMgr.bulletU.getHeight() / 2;
+        TankFrame.INSTANCE.add(new Bullet(bX, bY, dir, group));
     }
 
     private void move() {
@@ -99,7 +102,7 @@ public class Tank {
         }
     }
 
-    private void back() {
+    public void back() {
         x = oldX;
         y = oldY;
     }
@@ -111,6 +114,10 @@ public class Tank {
 
     public void die() {
         live = false;
-        TankFrame.INSTANCE.addExplode(new Explode(x, y));
+        TankFrame.INSTANCE.add(new Explode(x, y));
+    }
+
+    public Rectangle getRect() {
+        return rect;
     }
 }

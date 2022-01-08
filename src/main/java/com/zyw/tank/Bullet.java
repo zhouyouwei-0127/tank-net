@@ -4,12 +4,13 @@ import lombok.Getter;
 
 import java.awt.*;
 
-public class Bullet {
+public class Bullet extends AbstractGameObject {
 
     public static final int SPEED = 10;
 
     private final Dir dir;
 
+    @Getter
     private final Group group;
 
     private int x, y;
@@ -17,11 +18,19 @@ public class Bullet {
     @Getter
     private boolean live = true;
 
+    private int w = ResourceMgr.bulletU.getWidth();
+
+    private int h = ResourceMgr.bulletU.getHeight();
+
+    private Rectangle rect;
+
     public Bullet(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
+
+        rect = new Rectangle(x, y, w, h);
     }
 
     public void paint(Graphics g) {
@@ -41,22 +50,15 @@ public class Bullet {
         }
 
         move();
+        rect.x = x;
+        rect.y = y;
     }
 
-    public void collidesWithTank(Tank tank) {
-        if (!this.isLive() || !tank.isLive() || this.group == tank.getGroup()) {
-            return;
-        }
-        Rectangle rect = new Rectangle(this.x, this.y, ResourceMgr.bulletU.getWidth(), ResourceMgr.bulletU.getHeight());
-        Rectangle rectTank = new Rectangle(tank.getX(), tank.getY(),
-                ResourceMgr.goodTankU.getWidth(), ResourceMgr.goodTankU.getHeight());
-        if (rect.intersects(rectTank)) {
-            this.die();
-            tank.die();
-        }
+    public Rectangle getRect() {
+        return rect;
     }
 
-    private void die() {
+    public void die() {
         this.live = false;
     }
 
@@ -75,7 +77,6 @@ public class Bullet {
                 y += SPEED;
                 break;
         }
-
         boundsCheck();
     }
 
