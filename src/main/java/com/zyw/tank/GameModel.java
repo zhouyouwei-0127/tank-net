@@ -31,7 +31,7 @@ public class GameModel implements Serializable {
         for (int i = 0; i < tankCount; i++) {
             objects.add(new Tank(100 * i, 200, Dir.D, Group.BAD));
         }
-        this.add(new Wall(300, 400, 400, 50));
+        //this.add(new Wall(300, 400, 400, 50));
     }
 
     public void paint(Graphics g) {

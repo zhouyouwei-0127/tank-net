@@ -1,3 +1,5 @@
+package com.zyw.tanktest;
+
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
