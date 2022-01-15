@@ -1,4 +1,4 @@
-package com.zyw.net.nettychart;
+package com.zyw.net.nettycodec;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -24,7 +24,9 @@ public class Server {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new ServerChildHandler());
+                            socketChannel.pipeline()
+                                    .addLast(new TankMsgDecoder())
+                                    .addLast(new ServerChildHandler());
                         }
                     })
                     .bind(8888)
@@ -50,18 +52,8 @@ public class Server {
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-            ByteBuf buf = (ByteBuf) msg;
-            byte[] bytes = new byte[buf.readableBytes()];
-            buf.getBytes(buf.readerIndex(), bytes);
-            String str = new String(bytes);
-            if (str.equals("__bye__")) {
-                clients.remove(ctx.channel());
-                ctx.close();
-                System.out.println(clients.size());
-            } else {
-                //writeAndFlush会自动释放buf的引用
-                clients.writeAndFlush(msg);
-            }
+            TankMsg tm = (TankMsg) msg;
+            ServerFrame.INSTANCE.updateClientMsg(msg.toString());
         }
 
         @Override

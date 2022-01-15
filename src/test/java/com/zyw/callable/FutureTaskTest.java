@@ -1,6 +1,5 @@
 package com.zyw.callable;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 public class FutureTaskTest {

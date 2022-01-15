@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import java.io.*;
 
+/**
+ * test serialize for tank
+ */
 public class SerializeTest {
 
     @Test

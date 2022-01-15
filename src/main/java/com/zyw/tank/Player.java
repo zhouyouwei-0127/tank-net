@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.UUID;
 
 public class Player extends AbstractGameObject {
 
@@ -21,6 +22,7 @@ public class Player extends AbstractGameObject {
 
     private static final int SPEED = 5;
 
+    @Getter
     private boolean moving;
 
     @Getter
@@ -30,6 +32,9 @@ public class Player extends AbstractGameObject {
     private boolean live = true;
 
     private FireStrategy strategy = null;
+
+    @Getter
+    private final UUID id = UUID.randomUUID();
 
     public Player(int x, int y, Dir dir, Group group) {
         this.x = x;
@@ -41,18 +46,25 @@ public class Player extends AbstractGameObject {
     }
 
     public void paint(Graphics g) {
+        if (!this.isLive()) return;
+
+        Color c = g.getColor();
+        g.setColor(Color.YELLOW);
+        g.drawString(id.toString(), x, y - 10);
+        g.setColor(c);
+
         switch (dir) {
             case L:
-                g.drawImage(ResourceMgr.goodTankL, x, y, null);
+                g.drawImage(this.group.equals(Group.BAD) ? ResourceMgr.badTankL : ResourceMgr.goodTankL, x, y, null);
                 break;
             case U:
-                g.drawImage(ResourceMgr.goodTankU, x, y, null);
+                g.drawImage(this.group.equals(Group.BAD) ? ResourceMgr.badTankU : ResourceMgr.goodTankU, x, y, null);
                 break;
             case R:
-                g.drawImage(ResourceMgr.goodTankR, x, y, null);
+                g.drawImage(this.group.equals(Group.BAD) ? ResourceMgr.badTankR : ResourceMgr.goodTankR, x, y, null);
                 break;
             case D:
-                g.drawImage(ResourceMgr.goodTankD, x, y, null);
+                g.drawImage(this.group.equals(Group.BAD) ? ResourceMgr.badTankD : ResourceMgr.goodTankD, x, y, null);
                 break;
         }
 
