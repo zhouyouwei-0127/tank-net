@@ -11,7 +11,7 @@ import org.junit.Test;
 import java.util.UUID;
 
 /**
- * test MsgEncoder and MsgDecoder which in the package com.zyw.tank.net
+ * test TankJoinMsg encoder and decoder which in the package com.zyw.tank.net
  */
 public class TankJoinMsgTest {
 
@@ -24,6 +24,7 @@ public class TankJoinMsgTest {
         channel.writeOutbound(tm);
 
         ByteBuf buf = channel.readOutbound();
+        MsgType msgType = MsgType.values()[buf.readInt()];
         int length = buf.readInt();
         int x = buf.readInt();
         int y = buf.readInt();
@@ -32,12 +33,13 @@ public class TankJoinMsgTest {
         Group group = Group.values()[buf.readInt()];
         UUID id = new UUID(buf.readLong(), buf.readLong());
 
+        assert msgType.equals(MsgType.TankJoin);
         assert length == 33;
         assert x == 5;
         assert y == 10;
-        assert dir == Dir.L;
+        assert dir.equals(Dir.L);
         assert !moving;
-        assert group == Group.BAD;
+        assert group.equals(Group.BAD);
         assert id.equals(player.getId());
     }
 
@@ -48,6 +50,7 @@ public class TankJoinMsgTest {
 
         UUID id = UUID.randomUUID();
         ByteBuf buf = Unpooled.buffer();
+        buf.writeInt(MsgType.TankJoin.ordinal());
         buf.writeInt(33);
         buf.writeInt(5);
         buf.writeInt(10);

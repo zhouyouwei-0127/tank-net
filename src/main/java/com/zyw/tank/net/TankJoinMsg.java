@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.UUID;
 
 @Getter
-public class TankJoinMsg {
+public class TankJoinMsg extends Msg {
     private int x, y;
     private Dir dir;
     private boolean moving;
@@ -38,6 +38,7 @@ public class TankJoinMsg {
                 '}';
     }
 
+    @Override
     public byte[] toBytes() {
         ByteArrayOutputStream baos = null;
         DataOutputStream dos = null;
@@ -64,17 +65,11 @@ public class TankJoinMsg {
                     e.printStackTrace();
                 }
             }
-            if (baos != null) {
-                try {
-                    baos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
         return bytes;
     }
 
+    @Override
     public void parse(byte[] bytes) {
         ByteArrayInputStream bais = null;
         DataInputStream dis = null;
@@ -101,13 +96,22 @@ public class TankJoinMsg {
         }
     }
 
+    @Override
     public void handle() {
+        //是自己则不处理
         if (this.id.equals(TankFrame.INSTANCE.getGm().getMyTank().getId())) return;
+        //已经存在则不处理
         if (TankFrame.INSTANCE.getGm().findTankByUUID(this.id) != null) return;
 
         Tank tank = new Tank(this);
         TankFrame.INSTANCE.getGm().add(tank);
 
+        //每次处理消息的时候将自己发出去，不然后连上来的client不知道前面的存在
         Client.INSTANCE.send(new TankJoinMsg(TankFrame.INSTANCE.getGm().getMyTank()));
+    }
+
+    @Override
+    MsgType getMsgType() {
+        return MsgType.TankJoin;
     }
 }
