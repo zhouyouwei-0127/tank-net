@@ -3,6 +3,8 @@ package com.zyw.tank.net;
 import com.zyw.tank.Dir;
 import com.zyw.tank.Group;
 import com.zyw.tank.Player;
+import com.zyw.tank.net.msg.MsgType;
+import com.zyw.tank.net.msg.TankJoinMsg;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.embedded.EmbeddedChannel;
@@ -33,7 +35,7 @@ public class TankJoinMsgTest {
         Group group = Group.values()[buf.readInt()];
         UUID id = new UUID(buf.readLong(), buf.readLong());
 
-        assert msgType.equals(MsgType.TankJoin);
+        assert msgType.equals(MsgType.TANK_JOIN);
         assert length == 33;
         assert x == 5;
         assert y == 10;
@@ -50,7 +52,7 @@ public class TankJoinMsgTest {
 
         UUID id = UUID.randomUUID();
         ByteBuf buf = Unpooled.buffer();
-        buf.writeInt(MsgType.TankJoin.ordinal());
+        buf.writeInt(MsgType.TANK_JOIN.ordinal());
         buf.writeInt(33);
         buf.writeInt(5);
         buf.writeInt(10);

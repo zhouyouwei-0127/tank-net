@@ -28,7 +28,8 @@ public class GameModel implements Serializable {
     }
 
     private void initGameObjects() {
-        this.myTank = new Player(50 + random.nextInt(700), 50 + random.nextInt(700),
+        this.myTank = new Player(50 + random.nextInt(500),
+                50 + random.nextInt(500),
                 Dir.values()[random.nextInt(Dir.values().length)],
                 Group.values()[random.nextInt(Group.values().length)]);
 

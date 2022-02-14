@@ -1,5 +1,6 @@
 package com.zyw.tank.net;
 
+import com.zyw.tank.net.msg.Msg;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;

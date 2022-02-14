@@ -1,8 +1,10 @@
 package com.zyw.tank;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.*;
+import java.util.UUID;
 
 public class Bullet extends AbstractGameObject {
 
@@ -10,12 +12,21 @@ public class Bullet extends AbstractGameObject {
 
     public static final int SPEED = 10;
 
+    @Getter
     private final Dir dir;
 
     @Getter
     private final Group group;
 
+    @Getter
     private int x, y;
+
+    @Getter
+    @Setter
+    private UUID id = UUID.randomUUID();
+
+    @Getter
+    private final UUID playerId;
 
     @Getter
     private boolean live = true;
@@ -26,7 +37,8 @@ public class Bullet extends AbstractGameObject {
 
     private final Rectangle rect;
 
-    public Bullet(int x, int y, Dir dir, Group group) {
+    public Bullet(UUID playerId, int x, int y, Dir dir, Group group) {
+        this.playerId = playerId;
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -83,7 +95,7 @@ public class Bullet extends AbstractGameObject {
     }
 
     private void boundsCheck() {
-        if (x < 0 || y < 30 || x > TankFrame.INSTANCE.GAME_WIDTH || y > TankFrame.INSTANCE.GAME_HEIGHT) {
+        if (x < 0 || y < 30 || x > TankFrame.INSTANCE.getGAME_WIDTH() || y > TankFrame.INSTANCE.getGAME_WIDTH()) {
             live = false;
         }
     }

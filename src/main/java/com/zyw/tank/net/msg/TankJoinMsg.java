@@ -1,6 +1,7 @@
-package com.zyw.tank.net;
+package com.zyw.tank.net.msg;
 
 import com.zyw.tank.*;
+import com.zyw.tank.net.Client;
 import lombok.Getter;
 
 import java.io.*;
@@ -14,9 +15,6 @@ public class TankJoinMsg extends Msg {
     private Group group;
     private UUID id;
 
-    public TankJoinMsg() {
-    }
-
     public TankJoinMsg(Player p) {
         this.x = p.getX();
         this.y = p.getY();
@@ -26,21 +24,12 @@ public class TankJoinMsg extends Msg {
         this.id = p.getId();
     }
 
-    @Override
-    public String toString() {
-        return "TankJoinMsg{" +
-                "x=" + x +
-                ", y=" + y +
-                ", dir=" + dir +
-                ", moving=" + moving +
-                ", group=" + group +
-                ", id=" + id +
-                '}';
+    public TankJoinMsg() {
     }
 
     @Override
     public byte[] toBytes() {
-        ByteArrayOutputStream baos = null;
+        ByteArrayOutputStream baos;
         DataOutputStream dos = null;
         byte[] bytes = null;
         try {
@@ -71,7 +60,7 @@ public class TankJoinMsg extends Msg {
 
     @Override
     public void parse(byte[] bytes) {
-        ByteArrayInputStream bais = null;
+        ByteArrayInputStream bais;
         DataInputStream dis = null;
 
         try {
@@ -111,7 +100,19 @@ public class TankJoinMsg extends Msg {
     }
 
     @Override
-    MsgType getMsgType() {
-        return MsgType.TankJoin;
+    public MsgType getMsgType() {
+        return MsgType.TANK_JOIN;
+    }
+
+    @Override
+    public String toString() {
+        return "TankJoinMsg{" +
+                "x=" + x +
+                ", y=" + y +
+                ", dir=" + dir +
+                ", moving=" + moving +
+                ", group=" + group +
+                ", id=" + id +
+                '}';
     }
 }

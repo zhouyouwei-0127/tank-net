@@ -1,8 +1,9 @@
 package com.zyw.tank.net;
 
 import com.zyw.tank.TankFrame;
+import com.zyw.tank.net.msg.Msg;
+import com.zyw.tank.net.msg.TankJoinMsg;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -45,7 +46,7 @@ public class Client {
         }
     }
 
-    public void send(TankJoinMsg msg) {
+    public void send(Msg msg) {
         channel.writeAndFlush(msg);
     }
 
@@ -53,7 +54,7 @@ public class Client {
         channel.close();
     }
 
-    static class ClientHandler extends SimpleChannelInboundHandler<TankJoinMsg> {
+    static class ClientHandler extends SimpleChannelInboundHandler<Msg> {
 
         @Override
         public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -61,9 +62,9 @@ public class Client {
         }
 
         @Override
-        protected void channelRead0(ChannelHandlerContext ctx, TankJoinMsg tankJoinMsg) throws Exception {
-            System.out.println(tankJoinMsg.toString());
-            tankJoinMsg.handle();
+        protected void channelRead0(ChannelHandlerContext ctx, Msg msg) throws Exception {
+            System.out.println(msg.toString());
+            msg.handle();
         }
 
         @Override

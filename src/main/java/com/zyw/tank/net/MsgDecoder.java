@@ -1,5 +1,6 @@
 package com.zyw.tank.net;
 
+import com.zyw.tank.net.msg.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -22,10 +23,28 @@ public class MsgDecoder extends ByteToMessageDecoder {
         byte[] bytes = new byte[length];
         buf.readBytes(bytes);
 
-        Msg msg = (Msg) Class.forName("com.zyw.tank.net." + msgType.toString() + "Msg")
-                .getDeclaredConstructor()
-                .newInstance();
+        Msg msg = getMsgByMsgType(msgType);
         msg.parse(bytes);
+
         list.add(msg);
+    }
+
+    private Msg getMsgByMsgType(MsgType msgType) {
+        Msg msg = null;
+        switch (msgType) {
+            case TANK_JOIN:
+                msg = new TankJoinMsg();
+                break;
+            case TANK_MOVE_OR_DIR_CHANGE:
+                msg = new TankMoveOrDirChangeMsg();
+                break;
+            case TANK_STOP:
+                msg = new TankStopMsg();
+                break;
+            case BULLET_NEW:
+                msg = new BulletNewMsg();
+                break;
+        }
+        return msg;
     }
 }

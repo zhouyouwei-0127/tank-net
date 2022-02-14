@@ -1,7 +1,9 @@
 package com.zyw.tank;
 
+import com.zyw.tank.net.Client;
+import com.zyw.tank.net.msg.TankMoveOrDirChangeMsg;
+import com.zyw.tank.net.msg.TankStopMsg;
 import com.zyw.tank.strategy.FireStrategy;
-import com.zyw.tank.strategy.FourDirFireStrategy;
 import lombok.Getter;
 
 import java.awt.*;
@@ -92,8 +94,12 @@ public class Player extends AbstractGameObject {
     }
 
     private void setMainDir() {
+        boolean oldMoving = moving;
+        Dir oldDir = this.getDir();
         if (!bL && !bU && !bR && !bD) {
             moving = false;
+            if (oldMoving)
+                Client.INSTANCE.send(new TankStopMsg(this.id, this.x, this.y));
         }else {
             moving = true;
             if (bL && !bU && !bR && !bD)
@@ -104,6 +110,9 @@ public class Player extends AbstractGameObject {
                 dir = Dir.R;
             if (!bL && !bU && !bR && bD)
                 dir = Dir.D;
+
+            if (!oldMoving || !oldDir.equals(this.dir))
+                Client.INSTANCE.send(new TankMoveOrDirChangeMsg(this.id, this.x, this.y, this.dir));
         }
     }
 

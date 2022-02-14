@@ -1,7 +1,8 @@
 package com.zyw.tank;
 
-import com.zyw.tank.net.TankJoinMsg;
+import com.zyw.tank.net.msg.TankJoinMsg;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.*;
 import java.util.Random;
@@ -12,12 +13,15 @@ public class Tank extends AbstractGameObject {
     private static final long serialVersionUID = 923444048306782297L;
 
     @Getter
+    @Setter
     private int x, y;
 
+    @Setter
     private Dir dir;
 
     private static final int SPEED = 5;
 
+    @Setter
     private boolean moving = true;
 
     @Getter
@@ -87,7 +91,7 @@ public class Tank extends AbstractGameObject {
     private void fire() {
         int bX = this.x + this.width / 2 - Bullet.W / 2;
         int bY = this.y + this.height / 2 - Bullet.H / 2;
-        TankFrame.INSTANCE.getGm().add(new Bullet(bX, bY, dir, group));
+        TankFrame.INSTANCE.getGm().add(new Bullet(this.id, bX, bY, dir, group));
     }
 
     private void move() {
@@ -112,14 +116,14 @@ public class Tank extends AbstractGameObject {
         }
 
         boundsCheck();
-        randomDir();
+        /*randomDir();
 
         if (r.nextInt(100) > 85)
-            fire();
+            fire();*/
     }
 
     private void boundsCheck() {
-        if (x < 0 || y < 30 || x + width > TankFrame.INSTANCE.GAME_WIDTH || y + height > TankFrame.INSTANCE.GAME_HEIGHT) {
+        if (x < 0 || y < 30 || x + width > TankFrame.INSTANCE.getGAME_WIDTH() || y + height > TankFrame.INSTANCE.getGAME_HEIGHT()) {
             back();
         }
     }

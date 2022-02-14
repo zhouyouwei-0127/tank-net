@@ -14,9 +14,10 @@ public class TankFrame extends Frame {
 
     public static final TankFrame INSTANCE = new TankFrame();
 
-    public final int GAME_WIDTH = Integer.parseInt(PropertyMgr.get("gameWidth"));
-
-    public final int GAME_HEIGHT = Integer.parseInt(PropertyMgr.get("gameHeight"));
+    @Getter
+    private final int GAME_WIDTH = Integer.parseInt(PropertyMgr.get("gameWidth"));
+    @Getter
+    private final int GAME_HEIGHT = Integer.parseInt(PropertyMgr.get("gameHeight"));
 
     @Getter
     @Setter
